@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcDemo";
+
+package demo;
+
+// One service, five RPCs. Each one shows a different gRPC concept.
+service Demo {
+  // 1. Unary: one request, one response (like a normal REST call).
+  rpc SayHello (HelloRequest) returns (HelloReply);
+
+  // 2. Server streaming: one request, many responses.
+  rpc CountDown (CountRequest) returns (stream CountReply);
+
+  // 3. Client streaming: many requests, one response.
+  rpc Sum (stream NumberRequest) returns (SumReply);
+
+  // 4. Bidirectional streaming: both sides stream independently.
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+
+  // 5. Deliberately slow call, used to demonstrate deadlines.
+  rpc Slow (HelloRequest) returns (HelloReply);
+}
+
+message HelloRequest { string name = 1; }
+message HelloReply   { string message = 1; }
+
+message CountRequest { int32 from = 1; }
+message CountReply   { int32 value = 1; }
+
+message NumberRequest { int32 value = 1; }
+message SumReply      { int32 total = 1; int32 count = 2; }
+
+message ChatMessage {
+  string user = 1;
+  string text = 2;
+}
